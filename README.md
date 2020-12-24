@@ -29,4 +29,4 @@ Note I started out by including the [tactic CSS library]([GitHub - yegor256/taci
 
 ## Current Screenshot
 
-![screenshot_v1.png](./docs/screenshot_v1.png)
+![screenshot_v1.png](./docs/screenshot_v1.png?raw=true)
