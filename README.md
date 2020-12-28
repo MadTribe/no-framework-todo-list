@@ -11,13 +11,19 @@ For developers one of the great attractions of frameworks is how much code they 
 
 So in this repo I want to explore how to efficiently create a todo list application with just plain old javascript. I've chosen a todo list application because it is a common example for many frameworks to show.
 
-Currently the app has only **127 lines of js** code and is **< 5kb** download <u>uncompressed</u> (apart from a random winter decoration I added for my son.)
+Currently the app has only **158 lines of js** code and is **< 5kb** download <u>uncompressed</u> (apart from a random winter decoration I added for my son.)
 
 Compare this to the minified Vue.js framework (one of the better ones) which  is ~40kb out of the box before you write a single line of code. 
 
 The no-framework approach does have drawbacks, but it means ultimately you will invest your time in learning how the web platform actually works and how to get more out of javascript by, creating useful abstractions that keep your work efficient. 
 
 Ultimately you may decide that a framework is right for your project, but knowing how and when to work without one is a great asset to any developer. 
+
+# Features
+1. Add Todo
+1. Edit todo
+1. Delete todo
+1. Complete Todo
 
 # Rules
 

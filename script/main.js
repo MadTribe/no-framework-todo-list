@@ -42,6 +42,11 @@
         }
     };
 
+    /**
+     * 
+     * @param {object} item model to render
+     * @param {elem} event bus
+     */
     function todo_item(item, bus){
     
         var setState = function(item, state){
@@ -57,18 +62,55 @@
         var draw = function(){
                 var check=e('span','')()
                 check.className="check";  
-                var clickable = e('div')(
-                    check,
-                    e('label',item['name'])        
-                );     
+
+                var taskText = null;
+                var clickable = null;
+                var ret = null;
+                if (item.edit == false){
+                    taskText = e('label',item['name']);
+         
+                    clickable = e('div')(
+                        check,
+                        taskText       
+                    )
+
+                    ret = clickable;
+                    
+                } else {
+                    taskText = e('input',item['name'], {"type":"text", "value": item.name})();
+                    clickable = check;
+                    ret = e('div')(
+                        check,
+                        taskText       
+                    );
+                }
+     
+                
                 var delBtn = e('button','delete')();
+                var actionBtn = null; 
+                if (item.edit == false){
+                    actionBtn = e('button','edit')();
+                    actionBtn.onclick = function(){
+                        item.edit = true;
+                        bus.dispatchEvent(new Event('redraw'));
+                    }
+                } else {
+                    var actionBtn = e('button','save')();
+                    actionBtn.onclick = function(){
+                        item.edit = false;
+                        console.log('task component',taskText)
+                        item.name = taskText.value
+                        bus.dispatchEvent(new Event('redraw'));
+                    }
+                }
                 
                 delBtn.onclick = function(){
                     bus.dispatchEvent(new CustomEvent('delete', {'detail':item}));
                 }
-                
+
                 var elem = e('div')(
-                        clickable,
+                        ret,
+                        actionBtn,
                         delBtn
                     )
                 
@@ -107,7 +149,7 @@
         btn.onclick=function(){
             console.log('new task ', input.value);
             if (input.value != ""){
-                model.push({"name": input.value,"done":false})
+                model.push({"name": input.value,"done":false, "edit":false})
 
                 bus.dispatchEvent(new Event('redraw'));
             }
@@ -121,10 +163,10 @@
     var app = find('#app');
 
     var model = [
-        {"name":"washing up","done":true},
-        {"name":"sweep floor","done":false},
-        {"name":"homework","done":true},
-        {"name":"party","done":false}
+        {"name":"washing up","done":true,"edit":false},
+        {"name":"sweep floor","done":false,"edit":false},
+        {"name":"homework","done":true,"edit":false},
+        {"name":"party","done":false,"edit":false}
     ]
 
     var container = null;
