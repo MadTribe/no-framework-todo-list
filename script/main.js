@@ -107,10 +107,12 @@
                 }
      
                 
-                var delBtn = e('button','delete')();
+                var delBtn = e('div')();
+                delBtn.className='delete-btn'
                 var actionBtn = null; 
                 if (item.edit == false){
-                    actionBtn = e('button','edit')();
+                    actionBtn = e('div')();
+                    actionBtn.className='edit-btn'
                     actionBtn.onclick = function(){
                         item.edit = true;
                         bus.dispatchEvent(new Event('redraw'));
