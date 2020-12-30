@@ -77,7 +77,8 @@
             } else {
                 cls = "not-done";
             }  
-            item.className = cls         
+            item.classList.add(cls)
+            item.classList.add('todo')
         }
 
         var draw = function(){
@@ -108,17 +109,19 @@
      
                 
                 var delBtn = e('div')();
-                delBtn.className='delete-btn'
+                delBtn.classList.add('delete-btn')
+                delBtn.classList.add('btn')
                 var actionBtn = null; 
                 if (item.edit == false){
                     actionBtn = e('div')();
-                    actionBtn.className='edit-btn'
+                    actionBtn.classList.add('edit-btn')
                     actionBtn.onclick = function(){
                         item.edit = true;
                         bus.dispatchEvent(new Event('redraw'));
                     }
                 } else {
-                    var actionBtn = e('button','save')();
+                    actionBtn = e('div')();
+                    actionBtn.classList.add('save-btn')
                     actionBtn.onclick = function(){
                         item.edit = false;
                         console.log('task component',taskText)
@@ -126,6 +129,7 @@
                         bus.dispatchEvent(new Event('redraw'));
                     }
                 }
+                actionBtn.classList.add('btn')
                 
                 delBtn.onclick = function(){
                     bus.dispatchEvent(new CustomEvent('delete', {'detail':item}));

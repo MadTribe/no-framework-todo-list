@@ -9,10 +9,18 @@
         #app{
             position: relative;
             min-width: 80em;
-            
         }
-        .done{
-            
+
+        .todo {
+            position: relative;
+            width: 90vw;
+            border-radius: 10px;
+            margin-bottom: 3px;
+            background-color: aliceblue;
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);  
+        }
+
+        .done{  
             color: greenyellow;
         }
 
@@ -21,12 +29,17 @@
         }
 
         .check {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
             display: inline-block;
             width: 20px;
             height: 20px;
             border: solid;
+            border-radius: 3px;
+            margin: auto;
             margin-right: 1rem;
-            border-radius: 5px;
+            margin-left: 10px;
         }
 
         .done .check {
@@ -36,23 +49,27 @@
         .done label {
             text-decoration: line-through;
             width: 20rem;
+
         }
 
-        .not-done label {
+        .todo label {
+            position: relative;
+            top: 5px;
+            left: 50px;
             text-decoration-style: dotted;
             width: 20rem;
         }
 
-        .done div {
+        .todo div {
             display: inline-block;
         }
 
-        .not-done div {
-            display: inline-block;
-        }
-
-        .not-done .check {
-            background-color:none;
+        .todo input {
+            
+            position: relative;
+            width: 20rem; 
+            top: 5px;
+            left: 50px;
         }
 
         input {
@@ -71,7 +88,6 @@
             animation-duration: 20s;
             animation-name: see-me-rollin;
             animation-iteration-count: infinite;
-            
         }
 
         @keyframes see-me-rollin {
@@ -91,22 +107,37 @@
             }
         }
 
-        .delete-btn {
-            padding: 0px;
-            margin: 0px;
-            margin-left: 20px;
-            width: 40px;
-            height: 40px;
-            background-image: url('./images/delete.svg');
+        .btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: auto;
+            padding: 3px;
+            margin-left: 12px;
+            width: 25px;
+            height: 25px;
             background-size: cover;
+            border-radius: 5px;
         }
+         .btn:hover {
+            background-color: rgb(222, 231, 241);
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);  
+         }
+
+
+        .delete-btn {
+            background-image: url('./images/delete.svg');
+            right: 10%;
+        }
+
         .edit-btn {
-            padding: 0px;
-            margin: 0px;
-            width: 35px;
-            height: 35px;
             background-image: url('./images/edit.svg');
-            background-size: cover;
+            right: calc(20vw - 20px);
+        }
+
+        .save-btn {
+            background-image: url('./images/save.svg');
+            right: calc(20vw - 20px)
         }
 
     </style>
