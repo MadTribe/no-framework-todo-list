@@ -217,7 +217,7 @@
         // build the whole app structure.
         container = e('div')(
             e('h2','No Framework Todo List'),
-            e('p','Tasks are saved as in your localStorage.'),
+            e('p','Tasks are saved in your localStorage.'),
             addTaskBtn(app, model),
             todo_list(model, app)   
         )
