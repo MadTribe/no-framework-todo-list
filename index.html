@@ -107,27 +107,73 @@
             height: 7vh;
             top: 0px;
             left: 0px;
+            opacity: 1;
             background-image: url('./images/snowman_head.png');
             background-size: cover;
             /* background-color: aqua; */
             animation-duration: 20s;
-            animation-name: see-me-rollin;
+            animation-name: see-me-rollin, see-me-sliding;
             animation-iteration-count: infinite;
+            border-radius: 50%;
         }
 
-        @keyframes see-me-rollin {
+        .snow-man::after {
+            content: "";
+            position: absolute;
+            width: 7vh;
+            height: 7vh;
+            top: 0px;
+            left: 0px;
+            opacity: 1;
+            background-size: cover;
+            /* background-color: aqua; */
+            animation-duration: 20s;
+            animation-name: see-me-rollin-back;
+            animation-iteration-count: infinite;
+            -webkit-box-shadow:  0px 5px 5px 0px rgba(0,0,0,0.58); 
+            box-shadow:  0px 5px 5px 0px  rgba(0,0,0,0.58);
+            border-radius: 50%;
+        }
+
+
+        @keyframes see-me-sliding {
             from {
                 left: 0vw;
-                transform: rotate(0deg);
             }
 
             50% {
                 left: 80vw;
-                transform: rotate(720deg);
             }
 
             100% {
                 left: 0vw;
+            }
+        }
+
+        @keyframes see-me-rollin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(720deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        @keyframes see-me-rollin-back {
+            from {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(-720deg);
+            }
+
+            100% {
                 transform: rotate(0deg);
             }
         }
