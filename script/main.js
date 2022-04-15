@@ -24,13 +24,17 @@
      * @param {String} tagName 
      * @param {String} text 
      * @param {Map} attrs 
+     * @param {String} id 
      */
-    function e(tagName, text, attrs){
+    function e(tagName, text, attrs, id){
         if (arguments.length < 2){
             text = null;
         }
         if (arguments.length < 3){
             attrs = {};
+        }  
+        if (arguments.length < 4){
+            id = null;
         }  
         return function(){
             var children = arguments;
@@ -39,8 +43,26 @@
                     children = arguments[0]
                 }
             }
-            
-            var elem = doc.createElement(tagName);
+           
+            var elem = null;
+            if (id == null){
+                id = ''
+            }
+            attrs.id = id;
+
+            elem = doc.getElementById(id);
+
+            var focused = false;
+            if (document.activeElement == elem){    
+                focused=true;
+            }
+
+            if (elem == null){
+                elem = doc.createElement(tagName);
+            } else {
+                console.log('reusing ',id);
+            }
+
 
             for (const attrName in attrs) {
                 elem.setAttribute(attrName,attrs[attrName])
@@ -55,6 +77,13 @@
                         elem.appendChild(child)
                     }
                 };
+            }
+
+            if (focused){
+                setTimeout(function(){
+                    elem.focus();
+                },0)
+               
             }
             if (text != null && text !== ""){
                 elem.innerText = text;
@@ -159,8 +188,15 @@
      * 
      * @param {Array} model 
      */
-    function todo_list(model, bus){
-        var elems = model.map(function(e) {
+    function todo_list(model,filter, bus){
+        var elems = model.filter(function(task){
+            if (filter == ''){
+                return true;
+            } else if (task.name.indexOf(filter) > -1){
+                return true;
+            }
+            return false;
+        }).map(function(e) {
             return todo_item(e, bus);
         });
         return e('ol')(
@@ -173,11 +209,11 @@
      * @param {event bus} bus 
      * @param {data model} model 
      */
-    function addTaskBtn(bus, model){
-        var input = e('input',null,{'type':'textbox'})();
-        input.focus();
+    function addTaskBtn(bus, model,focused){
+        var input = e('input',null,{'type':'textbox',
+                                      'placeholder':'Make a nice cup of tea.'},'task-input')();
         var btn = e('button',"Add Task")();
-        
+
         btn.onclick=function(){
             console.log('new task ', input.value);
             if (input.value != ""){
@@ -186,22 +222,36 @@
                 bus.dispatchEvent(new Event('redraw'));
             }
         }
-        return e('div')(
+        return e('span')(
             input,
             btn
         ) 
+    }
+
+    function filterInput(bus, filter, focused){
+        console.log('filter input', filter,focused);
+        const input = e('input',null,{'type':'textbox',
+                                      'placeholder':'search'},'filter-input')();
+        input.value =filter
+       
+        input.onkeyup = function(e){
+            bus.dispatchEvent(new CustomEvent('filter', {'detail':input.value}));
+        }
+        return input;
     }
 
     // locate the position for the app on the page.
     var app = find('#app');
 
     // Load data from localStorage or display default data if none found
-    var model =  JSON.parse(localStorage.getItem("todo_data")) || [
-        {"name":"washing up","done":true,"edit":false},
+    var model =  JSON.parse(localStorage.getItem("todo_data")) || {
+        "filter": "",
+        'focus':"addTaskBtn",
+        "todos":[{"name":"washing up","done":true,"edit":false},
         {"name":"sweep floor","done":false,"edit":false},
         {"name":"homework","done":true,"edit":false},
-        {"name":"party","done":false,"edit":false}
-    ]
+        {"name":"party","done":false,"edit":false}]
+    }
 
     var container = null;
 
@@ -209,17 +259,19 @@
      * Draw the application under the container element
      * @param {elem} app 
      */
-    function redraw(app){
-        if (container != null){
-            app.removeChild(container)
-        }
+    function redraw(app, model){
+        var oldContainer = container;
+
 
         // build the whole app structure.
         container = e('div')(
             e('h2','No Framework Todo List'),
-            e('p','Tasks are saved in your localStorage.'),
-            addTaskBtn(app, model),
-            todo_list(model, app)   
+            
+            e('p','Tasks are saved as in your localStorage.'),
+            addTaskBtn(app, model.todos, model.focus === "addTaskBtn"),
+            filterInput(app, model.filter, model.focus === "filterInput"),
+            e('span','filter.'),
+            todo_list(model.todos,model.filter ,app)   
         )
         
         app.appendChild(container)
@@ -227,22 +279,32 @@
         setTimeout(function(){
             localStorage.setItem("todo_data", JSON.stringify(model))
         },0)
+        if (oldContainer != null){
+            app.removeChild(oldContainer)
+        }
     }
 
     // Trigger initial drawing of the app
-    redraw(app)
+    redraw(app, model);
+
+    // Listen for redraw events
+    app.addEventListener('filter', function (e) {
+        console.log('redraw');
+        model.filter = e.detail;
+        redraw(app, model);
+    }, false);
 
     // Listen for redraw events
     app.addEventListener('redraw', function (e) {
         console.log('redraw');
-        redraw(app);
+        redraw(app, model);
     }, false);
 
     // Listen for delete task events
     app.addEventListener('delete', function (e) {
         console.log('delete event', e.detail);
-        model = model.filter(task => task != e.detail);
-        redraw(app);
+        model.todos = model.todos.filter(task => task != e.detail);
+        redraw(app, model);
     }, false);
 
 })(document, window)
