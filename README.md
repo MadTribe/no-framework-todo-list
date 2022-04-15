@@ -29,6 +29,7 @@ Ultimately you may decide that a framework is right for your project, but knowin
 1. Delete todo
 1. Complete Todo
 1. Persist to localStoreage
+1. Filter/search 
 
 ## Online
 Try it here:
@@ -45,7 +46,7 @@ Note I started out by including the [tactic CSS library]([GitHub - yegor256/taci
 
 
 
-### Current Screenshot
+### Old Screenshot
 
 ![screenshot_v1.png](./docs/screenshot_v1.png?raw=true)
 
