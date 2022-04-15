@@ -50,16 +50,15 @@
                 attrs['id'] = id;
             }
             
-
             elem = doc.getElementById(id);
 
             // store focused state as it will be lost when the element is moved
             var focused = false;
-            if (document.activeElement == elem){    
+            if (document.activeElement === elem){    
                 focused=true;
             }
 
-            if (elem == null){
+            if (elem === null){
                 elem = doc.createElement(tagName);
             } else {
                 console.log('reusing ',id);
@@ -119,7 +118,7 @@
                 var taskText = null;
                 var clickable = null;
                 var ret = null;
-                if (item.edit == false){
+                if (item.edit === false){
                     taskText = e('label',item['name']);
          
                     clickable = e('div')(
@@ -143,7 +142,7 @@
                 delBtn.classList.add('delete-btn')
                 delBtn.classList.add('btn')
                 var actionBtn = null; 
-                if (item.edit == false){
+                if (item.edit === false){
                     actionBtn = e('div')();
                     actionBtn.classList.add('edit-btn')
                     actionBtn.onclick = function(){
@@ -192,7 +191,7 @@
      */
     function todo_list(model,filter, bus){
         var elems = model.filter(function(task){
-            if (filter == ''){
+            if (filter === ''){
                 return true;
             } else if (task.name.indexOf(filter) > -1){
                 return true;
@@ -226,7 +225,7 @@
         }
 
         input.onkeyup = function(event) {
-                if (event.keyCode == 13) {
+                if (event.keyCode === 13) {
                    submit();
                 }
             }    
