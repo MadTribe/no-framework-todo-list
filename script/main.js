@@ -1,4 +1,5 @@
 (function(doc,win){
+    const STORAGE_KEY = "todo_data_2";
     /**
      * utility method to find an element
      * @param {css query} query 
@@ -45,13 +46,14 @@
             }
            
             var elem = null;
-            if (id == null){
-                id = ''
+            if (id != null){
+                attrs['id'] = id;
             }
-            attrs.id = id;
+            
 
             elem = doc.getElementById(id);
 
+            // store focused state as it will be lost when the element is moved
             var focused = false;
             if (document.activeElement == elem){    
                 focused=true;
@@ -62,7 +64,6 @@
             } else {
                 console.log('reusing ',id);
             }
-
 
             for (const attrName in attrs) {
                 elem.setAttribute(attrName,attrs[attrName])
@@ -79,6 +80,7 @@
                 };
             }
 
+            // update focused state on next clock tick when this is added to the dom.
             if (focused){
                 setTimeout(function(){
                     elem.focus();
@@ -214,13 +216,23 @@
                                       'placeholder':'Make a nice cup of tea.'},'task-input')();
         var btn = e('button',"Add Task")();
 
-        btn.onclick=function(){
+        function submit(){
             console.log('new task ', input.value);
             if (input.value != ""){
                 model.push({"name": input.value,"done":false, "edit":false})
-
+                input.value = ""
                 bus.dispatchEvent(new Event('redraw'));
             }
+        }
+
+        input.onkeyup = function(event) {
+                if (event.keyCode == 13) {
+                   submit();
+                }
+            }    
+
+        btn.onclick=function(){
+            submit();
         }
         return e('span')(
             input,
@@ -228,6 +240,13 @@
         ) 
     }
 
+    /**
+     * Returns Filter control
+     * @param {*} bus 
+     * @param {*} filter 
+     * @param {*} focused 
+     * @returns 
+     */
     function filterInput(bus, filter, focused){
         console.log('filter input', filter,focused);
         const input = e('input',null,{'type':'textbox',
@@ -244,7 +263,7 @@
     var app = find('#app');
 
     // Load data from localStorage or display default data if none found
-    var model =  JSON.parse(localStorage.getItem("todo_data")) || {
+    var model =  JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
         "filter": "",
         'focus':"addTaskBtn",
         "todos":[{"name":"washing up","done":true,"edit":false},
@@ -270,14 +289,13 @@
             e('p','Tasks are saved as in your localStorage.'),
             addTaskBtn(app, model.todos, model.focus === "addTaskBtn"),
             filterInput(app, model.filter, model.focus === "filterInput"),
-            e('span','filter.'),
             todo_list(model.todos,model.filter ,app)   
         )
         
         app.appendChild(container)
         // save model on next event loop
         setTimeout(function(){
-            localStorage.setItem("todo_data", JSON.stringify(model))
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(model))
         },0)
         if (oldContainer != null){
             app.removeChild(oldContainer)
