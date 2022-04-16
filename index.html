@@ -12,8 +12,8 @@
         input,button{border-radius:3.6px;display:inline-block;padding:9.9px;}
         input,label{margin-right:3.6px;}
         label{display:inline-block;margin-bottom:12.6px;}
-        button{background:#f2f2f2;color:#191919;cursor:pointer;display:inline;margin-bottom:18px;margin-right:7.2px;padding:6.525px 23.4px;text-align:center;}
-        button:hover{background:#d9d9d9;color:#000;}
+       
+        
         input{margin-bottom:18px;}
         input,button,html,body{font-family:system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:18px;font-stretch:normal;font-style:normal;font-weight:400;line-height:29.7px;}
         input,button,html,body{font-family:system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:18px;font-stretch:normal;font-style:normal;font-weight:400;line-height:29.7px;}
@@ -26,10 +26,20 @@
         body{background:#fff;color:#1a1919;padding:36px;}
         ol{margin-bottom:29.7px;}
         @media (max-width: 767px){
-        body{padding:18px 0;}
-        input{min-width:0;}
+        body{
+            padding:18px 0;
+            background-color: #ebf1f5;
+        }
+  
         }
 
+        :root{
+            --btn-col-sel : #c3b1fd;
+            --btn-col :#7684fc;
+            --done-col : #45fca5;
+            --not-done: #feafcd;
+
+        }
         
         #app{
             position: relative;
@@ -46,11 +56,12 @@
         }
 
         .done{  
-            color: #b5d97f;
+            background-color: var(--done-col);
         }
 
         .not-done{
-            color: rgba(211, 131, 131, 0.694);
+            background-color: var(--not-done);
+            color: #191919;
         }
 
         .check {
@@ -68,7 +79,8 @@
         }
 
         .done .check {
-            background-color: green;
+            background-color: black;
+
         }
 
         .done label {
@@ -99,6 +111,24 @@
 
         input {
             border: solid;
+            padding: 5px;
+            /* margin-bottom: 2px; */
+        }
+
+        button{
+            background:var(--btn-col);
+            color:#191919;
+            cursor:pointer;
+            display:inline;
+            margin-bottom:18px;
+            margin-right:7.2px;
+            padding:5px;
+            text-align:center;
+        }
+
+        button:hover{
+            background:var(--btn-col-sel);
+            color:#000;
         }
 
         .snow-man {
@@ -217,7 +247,7 @@
     <div id='app' >
         <div class="snow-man"></div>
     </div>
-    
+    <span>Learn more <a target="_blank" href="https://github.com/MadTribe/no-framework-todo-list">here</a></span>
     <script src="./script/main.js"></script>
 </body>
 </html>
